@@ -11,7 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import ru.scooter.praktikum.page.MainPage;
 
-import static ru.scooter.praktikum.page.Answer.*;
+import static page.Answer.*;
 
 
 public class FAQTest {
