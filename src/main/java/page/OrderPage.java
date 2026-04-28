@@ -1,6 +1,10 @@
 package page;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 public class OrderPage {
@@ -8,8 +12,14 @@ public class OrderPage {
 //"Для кого самокат"
 
     private  WebDriver driver;
+    private static WebDriverWait wait;
     public OrderPage(WebDriver driver){
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, 5);
+    }
+
+    public static void isOrderPageOpened() {
+        wait.until(driver -> driver.getCurrentUrl().contains("/order"));
     }
 
 
@@ -27,27 +37,23 @@ public class OrderPage {
     //Кнопка "Далее"
     private By nextOrderButton = By.xpath(".//button[text()='Далее']");
 
-    //Метод для заполнения поля "*Имя"
-    public void setName(String name){
+    //Метод для заполнения первой формы
+    public void setFirstFormOrder(String name, String surname, String address, String station, String phoneNumber){
+        //заполнения поля "*Имя"
         driver.findElement(fieldName).sendKeys(name);
-    }
-    //Метод для заполнения поля "*Фамилия"
-    public void setSurname(String surname){
+        //заполнения поля "*Фамилия"
         driver.findElement(fieldSurname).sendKeys(surname);
-    }
-    //Метод для заполнения поля "*Адресс: куда привезти"
-    public void setAddress (String address){
+        //заполнения поля "*Адресс: куда привезти"
         driver.findElement(fieldAddress).sendKeys(address);
-    }
-    //Метод для заполнения поля "*Станция метро"
-    public void setStation(String station) {
+        //заполнения поля "*Станция метро"
         driver.findElement(fieldMetro).click();
         driver.findElement(By.xpath(".//div[text()='" + station + "']")).click();
-    }
-    //Метод для заполнения поля "*Телефон: на него позвонит курьер"
-    public void setPhone(String phoneNumber){
+        //заполнения поля "*Телефон: на него позвонит курьер"
         driver.findElement(fieldPhone).sendKeys(phoneNumber);
     }
+
+
+
     //Метод для нажатия кнопки "Далее"
     public void clickNextOrderButton (){
         driver.findElement(nextOrderButton).click();
@@ -65,23 +71,25 @@ public class OrderPage {
     private By createOrderButton = By.xpath("//div[contains(@class,'Order_Buttons')]/button[text()='Заказать']");
     //Кнопка подтверждения оформления заказа
     private By сonfirmOrder = By.xpath("//button[text()='Да']");
-    //Метод заполнения поля "*Когда привезти самокат"
-public void setDate(String date){
-    driver.findElement(fieldDate).sendKeys(date, Keys.ENTER);
-}
-    //Метод заполнения поля "*Срок аренды"
-public void setRentalPeriod (String rentalPeriod){
-    driver.findElement(fieldRentalPeriod).click();
-    driver.findElement(By.xpath(".//div[text()='"+rentalPeriod+"']")).click();
-}
-    //Метод для выбора цвет в чек-боксе "Цвет самоката"
-public void setColor (String color){
-    driver.findElement(By.xpath(".//label[text()='"+color+"']")).click();
-}
-    //Метод для заполнения поля "Комментарий для курьера"
-public void setComment(String comment){
-    driver.findElement(fieldComment).sendKeys(comment);
-}
+
+    //Метод заполнения полей второй формы
+    public void setSecondFormOrder(String date, String rentalPeriod, String color, String comment ) {
+        //поля "*Когда привезти самокат"
+        driver.findElement(fieldDate).sendKeys(date, Keys.ENTER);
+
+        driver.findElement(fieldRentalPeriod).click();
+        driver.findElement(By.xpath(".//div[text()='"+rentalPeriod+"']")).click();
+        //выбора цвет в чек-боксе "Цвет самоката"
+        driver.findElement(By.xpath(".//label[text()='"+color+"']")).click();
+        //заполнения поля "Комментарий для курьера"
+        driver.findElement(fieldComment).sendKeys(comment);
+    }
+
+
+
+
+
+
     //Метод для нажатия на кнопку "Заказать"
     public void clickCreateOrderButton(){
     driver.findElement(createOrderButton).click();
@@ -93,11 +101,12 @@ public void setComment(String comment){
 
     //Окно заказ оформлен
     private By orderPass = By.xpath("//div[text()='Заказ оформлен']");
+
     public boolean findElementOrderPass() {
-        WebElement element = driver.findElement(orderPass);
-        if (element != null) {
-            return true;
-        } else {
+        try {
+            WebElement element = driver.findElement(orderPass);
+            return element.isDisplayed();
+        } catch (NoSuchElementException e) {
             return false;
         }
     }

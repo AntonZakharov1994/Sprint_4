@@ -1,7 +1,8 @@
-package page.test;
+package test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -42,34 +43,31 @@ public class OrderTest {
                 {"Александр", "Васильев", "г.Москва", "Черкизовская", "89876544569", "11.11.2026", "двое суток", "серая безысходность", "Позвонить за 15 минут"}
         };
     }
-
-    @Test
-    public void MakingAnOrderTest(){
+    @Before
+    public void setUp() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        WebDriver driver = new ChromeDriver(options);
-        //Переход на страницу заказа
+        driver = new ChromeDriver(options);
+        //Открыть страницу "Яндекс Самокат"
         driver.get("https://qa-scooter.praktikum-services.ru/order");
+    }
+    @Test
+    public void MakingAnOrderTest(){
+
         OrderPage objOrder = new OrderPage(driver);
         //Заполняем поля первой страницы заказа
-        objOrder.setName(name);
-        objOrder.setSurname(surname);
-        objOrder.setAddress(address);
-        objOrder.setStation(station);
-        objOrder.setPhone(phoneNumber);
+        objOrder.setFirstFormOrder(name, surname, address, station, phoneNumber);
         //Клик по кнопке "Далее"
         objOrder.clickNextOrderButton();
         //Заполняем поля второй страницы заказа
-        objOrder.setDate(date);
-        objOrder.setRentalPeriod(rentalPeriod);
-        objOrder.setColor(color);
-        objOrder.setComment(comment);
+        objOrder.setSecondFormOrder( date,  rentalPeriod,  color,  comment );
         //Клик по кнопке "Заказать"
         objOrder.clickCreateOrderButton();
         //Клик по кнопке "Да"
         objOrder.clickConfirmOrder();
         //Проверка, что открылся элемент "Заказ оформлен"
-        objOrder.findElementOrderPass();
+        boolean isOrderPassShown = objOrder.findElementOrderPass();
+        org.junit.Assert.assertTrue("Заказ не оформлен", isOrderPassShown);
 
     }
     @After

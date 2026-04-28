@@ -3,7 +3,9 @@ package page;
 
 import org.hamcrest.MatcherAssert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import static org.hamcrest.CoreMatchers.is;
 
@@ -12,6 +14,7 @@ public class MainPage {
     public MainPage(WebDriver driver){
         this.driver = driver;
     }
+    public static final String BASE_URL = "https://qa-scooter.praktikum-services.ru/";
 
     //Кнопка "Заказать" вверху страницы
     private By topOrder = By.className("Button_Button__ra12g");
@@ -21,6 +24,9 @@ public class MainPage {
 
     // Кнопка "Заказать" внизу страницы
     private By downOrder = By.xpath("//button[contains(@class, 'Button_Middle__1CSJM') and text()='Заказать']");
+
+    //локатор для вопросов
+    private By questionAccardion = By.className("accordion");
 
 //Метод: Клик по кнопке "Заказать" вверху страницы
     public void clickButtonTopOrder() {
@@ -32,10 +38,22 @@ public class MainPage {
         driver.findElement(orderStatus).click();
     }
 
+    //
+    public void scrollButtonOrderDown(){
+    WebElement tableFAQ = driver.findElement(By.xpath("//button[contains(@class, 'Button_Middle__1CSJM') and text()='Заказать']"));
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", tableFAQ);}
+
     //Метод: Клик по кнопке "Заказать" внизу страницы
     public void clickButtonDownOrder(){
         driver.findElement(downOrder).click();
     }
+    //Метод для скрола к вопросам
+    public void scrollToFAQ() {
+        WebElement accordionElement = driver.findElement(By.className("accordion"));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", accordionElement);
+    }
+
     //Выпадающий список "Вопросы о важном"
     private By question1 = By.xpath(".//div[@class='accordion__item'][1]"); //Сколько это стоит? И как оплатить?
     private By question2 = By.xpath(".//div[@class='accordion__item'][2]"); //Хочу сразу несколько самокатов! Так можно?
@@ -116,6 +134,7 @@ public class MainPage {
     public void isCorrectText(String answer, String text) {
         MatcherAssert.assertThat(answer, is(text));
     }
+
 
 }
 
