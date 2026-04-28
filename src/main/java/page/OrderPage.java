@@ -18,8 +18,9 @@ public class OrderPage {
         this.wait = new WebDriverWait(driver, 5);
     }
 
-    public static void isOrderPageOpened() {
+    public static boolean isOrderPageOpened() {
         wait.until(driver -> driver.getCurrentUrl().contains("/order"));
+        return false;
     }
 
 
@@ -92,11 +93,11 @@ public class OrderPage {
 
     //Метод для нажатия на кнопку "Заказать"
     public void clickCreateOrderButton(){
-    driver.findElement(createOrderButton).click();
+        driver.findElement(createOrderButton).click();
     }
     //Метод для нажатия "Да"
     public void clickConfirmOrder(){
-    driver.findElement(сonfirmOrder).click();
+        driver.findElement(сonfirmOrder).click();
     }
 
     //Окно заказ оформлен
@@ -111,4 +112,3 @@ public class OrderPage {
         }
     }
 }
-

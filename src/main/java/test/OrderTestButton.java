@@ -3,6 +3,7 @@ package test;
 import org.junit.Test;
 import page.MainPage;
 import page.OrderPage;
+import static org.junit.Assert.assertTrue;
 
 
 public class OrderTestButton extends BaseTest {
@@ -17,7 +18,7 @@ public class OrderTestButton extends BaseTest {
         //Создаем обеъект класса страницы заказа
         OrderPage objOrder = new OrderPage(driver);
         //Проверка, что страница заказа открылась
-        OrderPage.isOrderPageOpened();
+        assertTrue("Страница заказа не открылась после нажатия кнопки вверху", OrderPage.isOrderPageOpened());
 
     }
 
@@ -30,7 +31,7 @@ public class OrderTestButton extends BaseTest {
         objMain.scrollButtonOrderDown();
         objMain.clickButtonDownOrder();
         OrderPage objOrder = new OrderPage(driver);
-        OrderPage.isOrderPageOpened();
+        assertTrue("Страница заказа не открылась после нажатия кнопки вверху", OrderPage.isOrderPageOpened());
     }
 
 }
